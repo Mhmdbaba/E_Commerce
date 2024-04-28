@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TFormatter {
@@ -17,6 +16,34 @@ class TFormatter {
     } else {
       return '(${phoneNumber.substring(0, 4)}) ${phoneNumber.substring(4, 7)} ${phoneNumber.substring(7)}';
     }
-    return phoneNumber;
+    // return phoneNumber;
+  }
+
+  static String internationalFormatPhoneNumber(String phoneNumber) {
+    var digitsOnly = phoneNumber.replaceAll(RegExp(r'\0'), '');
+
+    String countryCode = '+${digitsOnly.substring(0, 2)}';
+    digitsOnly = digitsOnly.substring(2);
+
+    final formattedNumber = StringBuffer();
+    formattedNumber.write('($countryCode) ');
+
+    int i = 0;
+    while (i < digitsOnly.length) {
+      int groupLength = 2;
+      if (i == 0 && countryCode == '+1') {
+        groupLength = 3;
+      }
+
+      int end = i + groupLength;
+      formattedNumber.write(digitsOnly.substring(i, end));
+
+      if (end < digitsOnly.length) {
+        formattedNumber.write(' ');
+      }
+
+      i = end;
+    }
+    return formattedNumber.toString();
   }
 }
