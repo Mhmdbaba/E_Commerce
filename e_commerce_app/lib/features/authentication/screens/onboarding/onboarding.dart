@@ -1,23 +1,27 @@
+import 'package:e_commerce_app_v2/features/authentication/controllers.onboarding/onboarding.controller.dart';
+import 'package:e_commerce_app_v2/features/authentication/screens/onboarding/widgets/onboarding_dot_navigstion.dart';
+import 'package:e_commerce_app_v2/features/authentication/screens/onboarding/widgets/onboarding_next_button.dart';
 import 'package:e_commerce_app_v2/features/authentication/screens/onboarding/widgets/onboarding_page.dart';
 import 'package:e_commerce_app_v2/features/authentication/screens/onboarding/widgets/onboarding_skip.dart';
-import 'package:e_commerce_app_v2/utils/constants/colors.dart';
 import 'package:e_commerce_app_v2/utils/constants/image_strings.dart';
-import 'package:e_commerce_app_v2/utils/constants/sizes.dart';
 import 'package:e_commerce_app_v2/utils/constants/text_strings.dart';
-import 'package:e_commerce_app_v2/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:get/get.dart';
 
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(OnboardingController());
+
     return Scaffold(
         body: Stack(
       children: [
         //Horizontal scrollable pages
         PageView(
+          controller: controller.pageController,
+          onPageChanged: controller.updatePageIndicator,
           children: const [
             OnBoardingPage(
               image: TImages.onBoardingImage1,
@@ -41,16 +45,10 @@ class OnBoardingScreen extends StatelessWidget {
         const OnBoardingSkip(),
 
         //dot navigation smoothPageIndicator
-        Positioned(
-          bottom: TDeviceUtils.getBottomNavigationBarHeight() + 25,
-          left: TSizes.defaultSpace,
-          child: SmoothPageIndicator(
-            controller: PageController(),
-            count: 3,
-            effect: const ExpandingDotsEffect(
-                activeDotColor: TColors.dark, dotHeight: 6),
-          ),
-        )
+        const OnBoardingDotNavigation(),
+
+        //circular button
+        const OnBoardingNextButton()
       ],
     ));
   }
